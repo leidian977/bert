@@ -188,7 +188,7 @@ class DataProcessor(object):
                 lines.append(line)
             return lines
 
-# 自定义 WSDM 数据分类
+# 自定义 数据分类
 class AProcessor(DataProcessor):
     def get_train_examples(self, data_dir):
         # 读取数据集
@@ -202,7 +202,7 @@ class AProcessor(DataProcessor):
         examples = []
         for index, row in df_train.iterrows():
             guid = 'train-%d' % index  # 按示例添加唯一 guid
-            text_a = tokenization.convert_to_unicode(str(row[1]))  # title1_zh
+            text_a = tokenization.convert_to_unicode(str(row[0]))  # title1_zh
             text_b = tokenization.convert_to_unicode(str(row[1]))  # title2_zh
             label = row[2]  # label
             examples.append(InputExample(guid=guid, text_a=text_a,
@@ -214,7 +214,7 @@ class AProcessor(DataProcessor):
         examples = []
         for index, row in self.df_dev.iterrows():
             guid = 'dev-%d' % index
-            text_a = tokenization.convert_to_unicode(str(row[1]))
+            text_a = tokenization.convert_to_unicode(str(row[0]))
             text_b = tokenization.convert_to_unicode(str(row[1]))
             label = row[2]
             examples.append(InputExample(guid=guid, text_a=text_a,
@@ -227,7 +227,7 @@ class AProcessor(DataProcessor):
         examples = []
         for index, row in self.df_test.iterrows():
             guid = 'test-%d' % index
-            text_a = tokenization.convert_to_unicode(str(row[1]))
+            text_a = tokenization.convert_to_unicode(str(row[0]))
             text_b = tokenization.convert_to_unicode(str(row[1]))
             label = '0'  # 随意指定测试数据初始标签
             examples.append(InputExample(guid=guid, text_a=text_a,
@@ -253,7 +253,7 @@ class XnliProcessor(DataProcessor):
             if i == 0:
                 continue
             guid = "train-%d" % (i)
-            text_a = tokenization.convert_to_unicode(line[1])
+            text_a = tokenization.convert_to_unicode(line[0])
             text_b = tokenization.convert_to_unicode(line[1])
             label = tokenization.convert_to_unicode(line[2])
             if label == tokenization.convert_to_unicode("contradictory"):
