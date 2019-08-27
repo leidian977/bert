@@ -131,9 +131,8 @@ flags.DEFINE_integer(
 class InputExample(object):
     """A single training/test example for simple sequence classification."""
 
-    def __init__(self, guid, text_b, label=None):
+    def __init__(self, guid, text_a, text_b=None, label=None):
         """Constructs a InputExample.
-
         Args:
           guid: Unique id for the example.
           text_a: string. The untokenized text of the first sequence. For single
@@ -144,6 +143,7 @@ class InputExample(object):
                 specified for train and dev examples, but not for test examples.
         """
         self.guid = guid
+        self.text_a = text_a
         self.text_b = text_b
         self.label = label
 
@@ -187,7 +187,8 @@ class DataProcessor(object):
                 lines.append(line)
             return lines
 
-class SYLProcessor(DataProcessor):
+# 自定义 WSDM 数据分类
+class AProcessor(DataProcessor):
     def get_train_examples(self, data_dir):
         # 读取数据集
         file_path = os.path.join(data_dir, 'comments_train.csv')
@@ -200,10 +201,10 @@ class SYLProcessor(DataProcessor):
         examples = []
         for index, row in df_train.iterrows():
             guid = 'train-%d' % index  # 按示例添加唯一 guid
-            #text_a = tokenization.convert_to_unicode(str(row[0]))
-            text_b = tokenization.convert_to_unicode(str(row[1]))
+            text_a = tokenization.convert_to_unicode(str(row[1]))  # title1_zh
+            text_b = tokenization.convert_to_unicode(str(row[1]))  # title2_zh
             label = row[2]  # label
-            examples.append(InputExample(guid=guid,
+            examples.append(InputExample(guid=guid, text_a=text_a,
                                          text_b=text_b, label=label))
         return examples
 
@@ -212,10 +213,10 @@ class SYLProcessor(DataProcessor):
         examples = []
         for index, row in self.df_dev.iterrows():
             guid = 'dev-%d' % index
-            #text_a = tokenization.convert_to_unicode(str(row[0]))
+            text_a = tokenization.convert_to_unicode(str(row[1]))
             text_b = tokenization.convert_to_unicode(str(row[1]))
             label = row[2]
-            examples.append(InputExample(guid=guid,
+            examples.append(InputExample(guid=guid, text_a=text_a,
                                          text_b=text_b, label=label))
         return examples
 
@@ -225,15 +226,15 @@ class SYLProcessor(DataProcessor):
         examples = []
         for index, row in self.df_test.iterrows():
             guid = 'test-%d' % index
-            #text_a = tokenization.convert_to_unicode(str(row[0]))
+            text_a = tokenization.convert_to_unicode(str(row[1]))
             text_b = tokenization.convert_to_unicode(str(row[1]))
-            label = '-1'  # 随意指定测试数据初始标签
-            examples.append(InputExample(guid=guid,
+            label = 'unrelated'  # 随意指定测试数据初始标签
+            examples.append(InputExample(guid=guid, text_a=text_a,
                                          text_b=text_b, label=label))
         return examples
 
     def get_labels(self):
-        return ['-1', '0', '1','2']
+        return ['unrelated', 'agreed', 'disagreed']
 
 class XnliProcessor(DataProcessor):
     """Processor for the XNLI data set."""
@@ -251,13 +252,13 @@ class XnliProcessor(DataProcessor):
             if i == 0:
                 continue
             guid = "train-%d" % (i)
-            #text_a = tokenization.convert_to_unicode(line[0])
-            text_b = tokenization.convert_to_unicode(line[0])
-            label = tokenization.convert_to_unicode(line[1])
+            text_a = tokenization.convert_to_unicode(line[1])
+            text_b = tokenization.convert_to_unicode(line[1])
+            label = tokenization.convert_to_unicode(line[2])
             if label == tokenization.convert_to_unicode("contradictory"):
                 label = tokenization.convert_to_unicode("contradiction")
             examples.append(
-                InputExample(guid=guid,  text_b=text_b, label=label))
+                InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
         return examples
 
     def get_dev_examples(self, data_dir):
@@ -271,11 +272,11 @@ class XnliProcessor(DataProcessor):
             language = tokenization.convert_to_unicode(line[0])
             if language != tokenization.convert_to_unicode(self.language):
                 continue
-            #text_a = tokenization.convert_to_unicode(line[6])
-            text_b = tokenization.convert_to_unicode(line[6])
+            text_a = tokenization.convert_to_unicode(line[6])
+            text_b = tokenization.convert_to_unicode(line[7])
             label = tokenization.convert_to_unicode(line[1])
             examples.append(
-                InputExample(guid=guid, text_b=text_b, label=label))
+                InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
         return examples
 
     def get_labels(self):
@@ -807,7 +808,7 @@ def main(_):
         "mnli": MnliProcessor,
         "mrpc": MrpcProcessor,
         "xnli": XnliProcessor,
-        "wsdm": SYLProcessor,
+        "wsdm": AProcessor,
     }
 
     if not FLAGS.do_train and not FLAGS.do_eval and not FLAGS.do_predict:
