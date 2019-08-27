@@ -144,7 +144,6 @@ class InputExample(object):
                 specified for train and dev examples, but not for test examples.
         """
         self.guid = guid
-        self.text_a = text_a
         self.text_b = text_b
         self.label = label
 
@@ -252,13 +251,13 @@ class XnliProcessor(DataProcessor):
             if i == 0:
                 continue
             guid = "train-%d" % (i)
-            text_a = tokenization.convert_to_unicode(line[0])
-            text_b = tokenization.convert_to_unicode(line[1])
-            label = tokenization.convert_to_unicode(line[2])
+            #text_a = tokenization.convert_to_unicode(line[0])
+            text_b = tokenization.convert_to_unicode(line[0])
+            label = tokenization.convert_to_unicode(line[1])
             if label == tokenization.convert_to_unicode("contradictory"):
                 label = tokenization.convert_to_unicode("contradiction")
             examples.append(
-                InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
+                InputExample(guid=guid,  text_b=text_b, label=label))
         return examples
 
     def get_dev_examples(self, data_dir):
@@ -272,11 +271,11 @@ class XnliProcessor(DataProcessor):
             language = tokenization.convert_to_unicode(line[0])
             if language != tokenization.convert_to_unicode(self.language):
                 continue
-            text_a = tokenization.convert_to_unicode(line[6])
-            text_b = tokenization.convert_to_unicode(line[7])
+            #text_a = tokenization.convert_to_unicode(line[6])
+            text_b = tokenization.convert_to_unicode(line[6])
             label = tokenization.convert_to_unicode(line[1])
             examples.append(
-                InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
+                InputExample(guid=guid, text_b=text_b, label=label))
         return examples
 
     def get_labels(self):
