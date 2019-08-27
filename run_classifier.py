@@ -133,6 +133,7 @@ class InputExample(object):
 
     def __init__(self, guid, text_a, text_b=None, label=None):
         """Constructs a InputExample.
+        
         Args:
           guid: Unique id for the example.
           text_a: string. The untokenized text of the first sequence. For single
@@ -228,13 +229,13 @@ class AProcessor(DataProcessor):
             guid = 'test-%d' % index
             text_a = tokenization.convert_to_unicode(str(row[1]))
             text_b = tokenization.convert_to_unicode(str(row[1]))
-            label = 'unrelated'  # 随意指定测试数据初始标签
+            label = '0'  # 随意指定测试数据初始标签
             examples.append(InputExample(guid=guid, text_a=text_a,
                                          text_b=text_b, label=label))
         return examples
 
     def get_labels(self):
-        return ['unrelated', 'agreed', 'disagreed']
+        return ['-1', '0', '1','2']
 
 class XnliProcessor(DataProcessor):
     """Processor for the XNLI data set."""
@@ -480,7 +481,7 @@ def convert_single_example(ex_index, example, label_list, max_seq_length,
     assert len(input_mask) == max_seq_length
     assert len(segment_ids) == max_seq_length
 
-    label_id = label_map.get(example.label)
+    label_id = label_map[example.label]
     if ex_index < 5:
         tf.logging.info("*** Example ***")
         tf.logging.info("guid: %s" % (example.guid))
