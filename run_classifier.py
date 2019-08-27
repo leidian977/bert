@@ -133,7 +133,6 @@ class InputExample(object):
 
     def __init__(self, guid, text_a, text_b=None, label=None):
         """Constructs a InputExample.
-        
         Args:
           guid: Unique id for the example.
           text_a: string. The untokenized text of the first sequence. For single
@@ -188,7 +187,7 @@ class DataProcessor(object):
                 lines.append(line)
             return lines
 
-# 自定义 数据分类
+# 自定义 WSDM 数据分类
 class AProcessor(DataProcessor):
     def get_train_examples(self, data_dir):
         # 读取数据集
