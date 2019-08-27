@@ -131,7 +131,7 @@ flags.DEFINE_integer(
 class InputExample(object):
     """A single training/test example for simple sequence classification."""
 
-    def __init__(self, guid, text_a, text_b=None, label=None):
+    def __init__(self, guid, text_a=None, text_b, label=None):
         """Constructs a InputExample.
 
         Args:
