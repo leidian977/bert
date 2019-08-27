@@ -192,7 +192,7 @@ class DataProcessor(object):
 class AProcessor(DataProcessor):
     def get_train_examples(self, data_dir):
         # 读取数据集
-        file_path = os.path.join(data_dir, 'comments_train.csv')
+        file_path = os.path.join(data_dir, 'train.csv')
         df = pd.read_csv(file_path)
         # 划分训练集和测试集
         df_train, self.df_test = train_test_split(df, test_size=0.2)
