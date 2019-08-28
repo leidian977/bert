@@ -202,10 +202,10 @@ class AProcessor(DataProcessor):
         for index, row in df_train.iterrows():
             guid = 'train-%d' % index  # 按示例添加唯一 guid
             text_a = tokenization.convert_to_unicode(str(row[0]))  # title1_zh
-            text_b = tokenization.convert_to_unicode(str(row[1]))  # title2_zh
+            #text_b = tokenization.convert_to_unicode(str(row[1]))  # title2_zh
             label = row[1]  # label
             examples.append(InputExample(guid=guid, text_a=text_a,
-                                         text_b=text_b, label=label))
+                                         label=label))
         return examples
 
     # 验证集
@@ -214,10 +214,10 @@ class AProcessor(DataProcessor):
         for index, row in self.df_dev.iterrows():
             guid = 'dev-%d' % index
             text_a = tokenization.convert_to_unicode(str(row[0]))
-            text_b = tokenization.convert_to_unicode(str(row[1]))
+            #text_b = tokenization.convert_to_unicode(str(row[1]))
             label = row[1]
             examples.append(InputExample(guid=guid, text_a=text_a,
-                                         text_b=text_b, label=label))
+                                         label=label))
         return examples
 
     # 测试集
@@ -227,10 +227,10 @@ class AProcessor(DataProcessor):
         for index, row in self.df_test.iterrows():
             guid = 'test-%d' % index
             text_a = tokenization.convert_to_unicode(str(row[0]))
-            text_b = tokenization.convert_to_unicode(str(row[1]))
+            #text_b = tokenization.convert_to_unicode(str(row[1]))
             label = '0'  # 随意指定测试数据初始标签
             examples.append(InputExample(guid=guid, text_a=text_a,
-                                         text_b=text_b, label=label))
+                                         label=label))
         return examples
 
     def get_labels(self):
