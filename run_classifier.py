@@ -187,11 +187,11 @@ class DataProcessor(object):
                 lines.append(line)
             return lines
 
-# 自定义 WSDM 数据分类
+# 自定义 数据分类
 class AProcessor(DataProcessor):
     def get_train_examples(self, data_dir):
         # 读取数据集
-        file_path = os.path.join(data_dir, 'train1.csv')
+        file_path = os.path.join(data_dir, 'train.csv')
         df = pd.read_csv(file_path)
         # 划分训练集和测试集
         df_train, self.df_test = train_test_split(df, test_size=0.2)
@@ -203,7 +203,7 @@ class AProcessor(DataProcessor):
             guid = 'train-%d' % index  # 按示例添加唯一 guid
             text_a = tokenization.convert_to_unicode(str(row[0]))  # title1_zh
             text_b = tokenization.convert_to_unicode(str(row[1]))  # title2_zh
-            label = row[2]  # label
+            label = row[1]  # label
             examples.append(InputExample(guid=guid, text_a=text_a,
                                          text_b=text_b, label=label))
         return examples
@@ -215,7 +215,7 @@ class AProcessor(DataProcessor):
             guid = 'dev-%d' % index
             text_a = tokenization.convert_to_unicode(str(row[0]))
             text_b = tokenization.convert_to_unicode(str(row[1]))
-            label = row[2]
+            label = row[1]
             examples.append(InputExample(guid=guid, text_a=text_a,
                                          text_b=text_b, label=label))
         return examples
@@ -234,7 +234,7 @@ class AProcessor(DataProcessor):
         return examples
 
     def get_labels(self):
-        return [ 0, 1,2,3]
+        return [-1, 0,1,2]
 
 class XnliProcessor(DataProcessor):
     """Processor for the XNLI data set."""
