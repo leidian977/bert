@@ -228,13 +228,13 @@ class AProcessor(DataProcessor):
             guid = 'test-%d' % index
             text_a = tokenization.convert_to_unicode(str(row[0]))
             #text_b = tokenization.convert_to_unicode(str(row[1]))
-            label = '0'  # 随意指定测试数据初始标签
+            label = 0  # 随意指定测试数据初始标签
             examples.append(InputExample(guid=guid, text_a=text_a,
                                          label=label))
         return examples
 
     def get_labels(self):
-        return ['-1','0','1','2']
+        return [-1,0,1,2]
 
 class XnliProcessor(DataProcessor):
     """Processor for the XNLI data set."""
