@@ -194,7 +194,10 @@ class AProcessor(DataProcessor):
         file_path = os.path.join(data_dir, 'train.csv')
         df = pd.read_csv(file_path)
         # 划分训练集和测试集
-        df_train, self.df_test = train_test_split(df, test_size=0.2)
+        file_path_test = os.path.join(data_dir, 'test.csv')
+        df_test = pd.read_csv(file_path_test)
+        df_train = df
+        self.df_test = df_test
         # 再从训练集中划分出一部分验证集
         df_train, self.df_dev = train_test_split(df_train, test_size=0.2)
         
@@ -222,11 +225,11 @@ class AProcessor(DataProcessor):
 
     # 测试集
     def get_test_examples(self, data_dir):
-        self.df_test.to_csv("test.csv", index=None)
+        #self.df_test.to_csv("test.csv", index=None)
         examples = []
         for index, row in self.df_test.iterrows():
             guid = 'test-%d' % index
-            text_a = tokenization.convert_to_unicode(str(row[0]))
+            text_a = tokenization.convert_to_unicode(str(row[1]))
             #text_b = tokenization.convert_to_unicode(str(row[1]))
             label = 0  # 随意指定测试数据初始标签
             examples.append(InputExample(guid=guid, text_a=text_a,
