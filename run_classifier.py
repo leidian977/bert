@@ -234,7 +234,7 @@ class AProcessor(DataProcessor):
         return examples
 
     def get_labels(self):
-        return [-1, 0,1,2]
+        return [0,1,2,3]
 
 class XnliProcessor(DataProcessor):
     """Processor for the XNLI data set."""
