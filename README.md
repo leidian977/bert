@@ -10,7 +10,7 @@ This project is a modified version of [google-research/bert](https://github.com/
 ```bash
 git clone https://github.com/huhuhang/bert.git  # 克隆仓库
 cd bert  # 切换到目录
-sh wsdm_run.sh  # 执行一键脚本
+sh data_run.sh  # 执行一键脚本
 ```
 
 推荐使用：
